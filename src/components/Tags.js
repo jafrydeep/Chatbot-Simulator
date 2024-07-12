@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 
-const Tags = ({ tags, handleAddTag, setTags }) => {
+const Tags = ({ selectedDataArea, handleAddTag, handleDeleteTag }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [newTag, setNewTag] = useState('');
+
+    if (!selectedDataArea) {
+        return <div>Please select a data area</div>;
+    }
 
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => {
@@ -15,16 +19,10 @@ const Tags = ({ tags, handleAddTag, setTags }) => {
         setNewTag(e.target.value);
     };
 
-    const handleDeleteTag = (index) => {
-        const updatedTags = [...tags];
-        updatedTags.splice(index, 1);
-        setTags(updatedTags)
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (newTag.trim() !== '') {
-            handleAddTag(newTag.trim());
+            handleAddTag(selectedDataArea.id, newTag.trim());
             setNewTag('');
             closeModal();
         }
@@ -43,11 +41,11 @@ const Tags = ({ tags, handleAddTag, setTags }) => {
 
             <p className='font-semibold mb-2'>Tags Area</p>
             <div className="flex flex-wrap">
-                {tags.map((tag, index) => (
+                {selectedDataArea.tags.map((tag, index) => (
                     <div key={index} className="relative inline-flex items-center bg-blue-200 text-black px-2 py-1 rounded m-1">
                         <span className="flex-1">{tag}</span>
                         <button
-                            onClick={() => handleDeleteTag(index)}
+                            onClick={() => handleDeleteTag(selectedDataArea.id, index)}
                             className="bg-transparent rounded-full text-slate-600 px-2 py-1 ml-2"
                         >
                             <svg
@@ -62,7 +60,6 @@ const Tags = ({ tags, handleAddTag, setTags }) => {
                         </button>
                     </div>
                 ))}
-
             </div>
             <Modal
                 isOpen={modalIsOpen}

@@ -47,7 +47,7 @@ const DataAreaList = ({ dataArea, handleAddData, setDataArea, setSelectedDataAre
             </div>
             <p className="font-semibold text-gray-800">Data Area List</p>
             <div className="rounded-lg h-fit overflow-y-auto max-h-[800px]">
-                {dataArea.map((data, index) => (
+                {dataArea?.map((data, index) => (
                     <div
                         key={index}
                         className={`${fullData?.selectedDataArea?.id === data?.id ? 'bg-blue-300 border-blue-500 border-2' : 'bg-blue-200'} p-4 rounded-lg mb-4 relative cursor-pointer`}

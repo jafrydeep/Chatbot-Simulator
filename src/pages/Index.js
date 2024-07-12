@@ -30,7 +30,7 @@ const Homepage = () => {
         ],
         selectedDataArea: null,
     });
-
+    
     const setSelectedDataArea = (dataArea) => {
         setCombinedState((prevState) => ({
             ...prevState,
@@ -51,6 +51,27 @@ const Homepage = () => {
             dataAreas,
         }));
     };
+
+    const handleAddTag = (id, newTag) => {
+        const newDataAreas = combinedState.dataAreas.map(area =>
+            area.id === id ? { ...area, tags: [...area.tags, newTag] } : area
+        );
+        setCombinedState({ ...combinedState, dataAreas: newDataAreas });
+    };
+
+    const handleDeleteTag = (id, index) => {
+        const newDataAreas = combinedState.dataAreas.map(area => {
+            if (area.id === id) {
+                const updatedTags = [...area.tags];
+                updatedTags.splice(index, 1);
+                return { ...area, tags: updatedTags };
+            }
+            return area;
+        });
+        setCombinedState({ ...combinedState, dataAreas: newDataAreas });
+    };
+
+
 
     return (
         <div className="gap-3 flex flex-row p-4 w-screen h-screen text-gray-700">
@@ -98,18 +119,21 @@ const Homepage = () => {
                                 },
                             }));
                         }}
+                        handleAddTag={handleAddTag}
+                        handleDeleteTag={handleDeleteTag}
+                        selectedDataArea={combinedState?.selectedDataArea}
                     />
-                     <DataAreaList
-                    dataArea={combinedState.dataAreas}
-                    fullData={combinedState}
-                    handleAddData={handleAddData}
-                    setDataArea={setDataAreas}
-                    setSelectedDataArea={setSelectedDataArea}
-                />
+                    <DataAreaList
+                        dataArea={combinedState.dataAreas}
+                        fullData={combinedState}
+                        handleAddData={handleAddData}
+                        setDataArea={setDataAreas}
+                        setSelectedDataArea={setSelectedDataArea}
+                    />
                 </div>
             </div>
             <div className='flex md:w-3/12 gap-3'>
-            <ChatFrame />
+                <ChatFrame />
 
             </div>
         </div>
