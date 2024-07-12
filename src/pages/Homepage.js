@@ -38,10 +38,9 @@ const Homepage = () => {
                     {/* Load File / Text Area */}
                     <div className="md:w-3/5 bg-yellow-500 p-2 rounded-lg">
                         <div className="flex justify-end gap-3 mb-4">
-                            <button className="bg-green-500 text-white px-2 py-1 rounded">Load File</button>
-                            <button className="bg-[#ED7D31] text-white px-2 py-1 rounded" onClick={() => setViewTextInput(true)}>Text</button>
                             <input type="file" accept=".pdf,.docx" className="hidden" id="fileInput" onChange={handleFileChange} />
                             <label htmlFor="fileInput" className="bg-green-500 text-white px-2 py-1 rounded cursor-pointer">Load File</label>
+                            <button className="bg-[#ED7D31] text-white px-2 py-1 rounded" onClick={() => setViewTextInput(true)}>Text</button>
                         </div>
                         <div className="bg-[#FFC000] p-2 rounded-lg flex justify-center h-[85%] items-center border-2 border-black">
                             {viewTextInput ? (
