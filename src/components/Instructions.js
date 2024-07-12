@@ -7,10 +7,10 @@ const Instructions = ({ instructions, handleAddInstruction, tags, handleAddTag }
             <div className='text-end'>
                 <button className="bg-orange-500 text-white mb-2 px-2 py-1 rounded" onClick={handleAddInstruction}>New Instruction</button>
             </div>
-            <div className="bg-white p-2 rounded-lg h-[50%]">
-                <p>Instructions Area</p>
+            <div className="bg-white p-4 rounded-lg h-[48%] shadow overflow-y-auto">
+                <p className="font-semibold mb-2">Instructions Area</p>
                 {instructions.map((instruction, index) => (
-                    <p key={index}>{instruction}</p>
+                    <p key={index} className="mb-1 text-gray-700 bg-blue-200 p-2 rounded-lg">{instruction}</p>
                 ))}
             </div>
 
