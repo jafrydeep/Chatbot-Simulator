@@ -29,7 +29,7 @@ const Homepage = () => {
     
 
     return (
-        <div className="gap-3 flex flex-row p-4 w-screen h-screen text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-200 to-pink-200">
+        <div className="gap-3 flex flex-row p-4 w-screen h-screen text-gray-700">
             <div className='flex flex-col md:w-9/12 gap-3'>
                 <div className='flex justify-end'>
                     <button className="bg-[#70AD47] text-white px-3 py-2 rounded-lg">Refresh the Bot</button>

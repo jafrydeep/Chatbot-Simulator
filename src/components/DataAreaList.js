@@ -31,7 +31,7 @@ const DataAreaList = ({ dataArea, handleAddData, setDataArea }) => {
     };
 
     return (
-        <div className="md:w-1/5 bg-blue-100 p-4 rounded-lg flex flex-col gap-3">
+        <div className="md:w-1/5 bg-white-100 border-slate-500 border-2 p-4 rounded-lg flex flex-col gap-3">
             <div className="text-end">
                 <button
                     className="bg-orange-500 hover:bg-orange-600 text-white mb-2 px-4 py-1 rounded shadow"

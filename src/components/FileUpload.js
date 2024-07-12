@@ -25,22 +25,22 @@ const FileUpload = ({ file, setFile, setViewTextInput, setText, text, viewTextIn
     const goToNextPage = () => setPageNumber(prevPage => Math.min(prevPage + 1, numPages));
 
     return (
-        <div className="md:w-3/5 bg-blue-100 p-4 rounded-lg">
+        <div className="md:w-3/5 bg-white-100 p-4 rounded-lg">
             <div className="flex justify-end gap-3 mb-4">
                 <input type="file" accept=".pdf,.docx" className="hidden" id="fileInput" onChange={handleFileChange} />
                 <label htmlFor="fileInput" className="bg-green-500 text-white px-2 py-1 rounded cursor-pointer">Load File</label>
                 <button className="bg-[#ED7D31] text-white px-2 py-1 rounded" onClick={() => setViewTextInput(true)}>Text</button>
             </div>
-            <div className="bg-white bg-opacity-90 group hover:bg-opacity-100 p-2 rounded-lg flex justify-center h-[85%] items-center shadow-xl">
+            <div className="bg-white-100 border-slate-500 border-2 bg-opacity-90 group hover:bg-opacity-100 p-2 rounded-lg flex justify-center h-[85%] items-center ">
                 {viewTextInput ? (
                     <textarea
-                        className='w-full h-full bg-white text-black text-3xl text-start outline-none placeholder:text-black py-3'
+                        className='w-full h-full p-3 text-black text-3xl text-start outline-none placeholder:text-black py-3'
                         placeholder='Enter your text here...'
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                     />
                 ) : (
-                    <div className='relative'>
+                    <div className='relative shadow-xl'>
                         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
                             <Page pageNumber={pageNumber} width={280} />
                         </Document>

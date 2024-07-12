@@ -38,7 +38,7 @@ const Instructions = ({ instructions, handleAddInstruction, tags, handleAddTag, 
     };
 
     return (
-        <div className="md:w-1/5 bg-blue-100 p-4 rounded-lg gap-3 flex flex-col">
+        <div className="md:w-1/5 bg-white-100 border-slate-500 border-2 p-4 rounded-lg gap-3 flex flex-col">
             <div className='text-end'>
                 <button
                     className="bg-orange-500 text-white mb-2 px-2 py-1 rounded"
