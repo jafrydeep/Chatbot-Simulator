@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 
-const DataAreaList = ({ dataArea, handleAddData, setDataArea, setSelectedDataArea, fullData }) => {
-    console.log(fullData?.selectedDataArea, dataArea)
+const DataAreaList = ({ dataArea, handleAddData, setDataArea }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [formData, setFormData] = useState({
         subject: '',
@@ -28,11 +27,7 @@ const DataAreaList = ({ dataArea, handleAddData, setDataArea, setSelectedDataAre
     const handleDeleteData = (index) => {
         const updatedData = [...dataArea];
         updatedData.splice(index, 1);
-        setDataArea(updatedData);
-    };
-
-    const handleSelectDataArea = (data) => {
-        setSelectedDataArea(data);
+        setDataArea(updatedData)
     };
 
     return (
@@ -48,19 +43,12 @@ const DataAreaList = ({ dataArea, handleAddData, setDataArea, setSelectedDataAre
             <p className="font-semibold text-gray-800">Data Area List</p>
             <div className="rounded-lg h-fit overflow-y-auto max-h-[800px]">
                 {dataArea.map((data, index) => (
-                    <div
-                        key={index}
-                        className={`${fullData?.selectedDataArea?.id === data?.id ? 'bg-blue-300 border-blue-500 border-2' : 'bg-blue-200'} p-4 rounded-lg mb-4 relative cursor-pointer`}
-                        onClick={() => handleSelectDataArea(data)}
-                    >
+                    <div key={index} className="bg-blue-200 p-4 rounded-lg mb-4 relative">
                         <h3 className="text-lg font-semibold mb-1 text-gray-800">{data.subject}</h3>
                         <p className="text-md mb-1 text-gray-600">{data.sub}</p>
                         <p className="text-sm text-gray-500">{data.description}</p>
                         <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteData(index);
-                            }}
+                            onClick={() => handleDeleteData(index)}
                             className="absolute top-2 right-2 text-slate-500 px-2 py-1 rounded"
                         >
                             <svg
