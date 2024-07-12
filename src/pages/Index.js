@@ -8,24 +8,25 @@ const Homepage = () => {
     const [viewTextInput, setViewTextInput] = useState(true);
     const [file, setFile] = useState(null);
     const [text, setText] = useState('');
-    const [instructions, setInstructions] = useState(['Dummy instruction 1', 'Dummy instruction 2']);
+    const [instructions, setInstructions] = useState([{type: 'test', value: 'test sample data'}]);
     const [tags, setTags] = useState(['Tag1', 'Tag2']);
     const [dataArea, setDataArea] = useState([
         { subject: 'Subject 1', sub: 'Sub 1', description: 'Description 1' },
         { subject: 'Subject 2', sub: 'Sub 2', description: 'Description 2' },
     ]);
 
-    const handleAddInstruction = () => {
-        setInstructions([...instructions, `Dummy instruction ${instructions.length + 1}`]);
+    const handleAddInstruction = (data) => {
+        setInstructions([...instructions, data ]);
     };
 
-    const handleAddTag = () => {
-        setTags([...tags, `Tag${tags.length + 1}`]);
+    const handleAddTag = (data) => {
+        setTags([...tags, data]);
     };
 
-    const handleAddData = () => {
-        setDataArea([...dataArea, { subject: `Subject ${dataArea.length + 1}`, sub: `Sub ${dataArea.length + 1}`, description: `Description ${dataArea.length + 1}` }]);
+    const handleAddData = (data) => {
+        setDataArea([...dataArea, data ]);
     };
+    
 
     return (
         <div className="gap-3 flex flex-row p-4 w-screen h-screen text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-200 to-pink-200">
@@ -42,8 +43,8 @@ const Homepage = () => {
                         setText={setText}
                         viewTextInput={viewTextInput}
                     />
-                    <Instructions instructions={instructions} handleAddInstruction={handleAddInstruction} tags={tags} handleAddTag={handleAddTag} />
-                    <DataAreaList dataArea={dataArea} handleAddData={handleAddData} />
+                    <Instructions setInstructions={setInstructions} setTags={setTags} instructions={instructions} handleAddInstruction={handleAddInstruction} tags={tags} handleAddTag={handleAddTag} />
+                    <DataAreaList dataArea={dataArea} handleAddData={handleAddData} setDataArea={setDataArea} />
                 </div>
             </div>
             <div className='md:flex-0 md:w-3/12'>

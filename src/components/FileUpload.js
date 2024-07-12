@@ -25,7 +25,7 @@ const FileUpload = ({ file, setFile, setViewTextInput, setText, text, viewTextIn
     const goToNextPage = () => setPageNumber(prevPage => Math.min(prevPage + 1, numPages));
 
     return (
-        <div className="md:w-3/5 bg-[#bfdbfe] p-4 rounded-lg">
+        <div className="md:w-3/5 bg-blue-100 p-4 rounded-lg">
             <div className="flex justify-end gap-3 mb-4">
                 <input type="file" accept=".pdf,.docx" className="hidden" id="fileInput" onChange={handleFileChange} />
                 <label htmlFor="fileInput" className="bg-green-500 text-white px-2 py-1 rounded cursor-pointer">Load File</label>
