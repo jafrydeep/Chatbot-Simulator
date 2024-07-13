@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 
 const Tags = ({ selectedDataArea, handleAddTag, handleDeleteTag }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [newTag, setNewTag] = useState('');
+    const [tags, setTags] = useState([]);
+
+    useEffect(() => {
+        if (selectedDataArea?.tags) {
+            setTags(selectedDataArea.tags);
+        }
+    }, [selectedDataArea?.tags]);
 
     if (!selectedDataArea) {
         return <div>Please select a data area</div>;
@@ -23,9 +30,15 @@ const Tags = ({ selectedDataArea, handleAddTag, handleDeleteTag }) => {
         e.preventDefault();
         if (newTag.trim() !== '') {
             handleAddTag(selectedDataArea.id, newTag.trim());
+            setTags([...tags, newTag.trim()]); // Update local state
             setNewTag('');
             closeModal();
         }
+    };
+
+    const handleDelete = (tagIndex) => {
+        handleDeleteTag(selectedDataArea.id, tagIndex);
+        setTags(tags.filter((_, index) => index !== tagIndex)); // Update local state
     };
 
     return (
@@ -41,12 +54,12 @@ const Tags = ({ selectedDataArea, handleAddTag, handleDeleteTag }) => {
 
             <p className='font-semibold mb-2'>Tags Area</p>
             <div className="flex flex-wrap">
-                {selectedDataArea.tags.map((tag, index) => (
+                {tags?.map((tag, index) => (
                     <div key={index} className="relative inline-flex items-center bg-blue-200 text-black px-2 py-1 rounded m-1">
                         <span className="flex-1">{tag}</span>
                         <button
-                            onClick={() => handleDeleteTag(selectedDataArea.id, index)}
-                            className="bg-transparent rounded-full text-slate-600 px-2 py-1 ml-2"
+                            onClick={() => handleDelete(index)}
+                            className="bg-transparent rounded-full text-slate-600 px-2 ml-2"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

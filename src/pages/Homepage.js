@@ -1,32 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    setCombinedState,
+    setSelectedDataArea,
+    addTag,
+    deleteTag,
+    addInstruction,
+    deleteInstruction,
+} from '../store/actions';
 import FileUpload from '../components/FileUpload';
 import Instructions from '../components/Instructions';
 import DataAreaList from '../components/DataAreaList';
 import ChatFrame from '../components/ChatFrame';
 
 const Homepage = () => {
-    const [viewTextInput, setViewTextInput] = useState(true);
-    const [file, setFile] = useState(null);
-    const [text, setText] = useState('');
-    const [instructions, setInstructions] = useState([{type: 'test', value: 'test sample data'}]);
-    const [tags, setTags] = useState(['Tag1', 'Tag2']);
-    const [dataArea, setDataArea] = useState([
-        { subject: 'Subject 1', sub: 'Sub 1', description: 'Description 1' },
-        { subject: 'Subject 2', sub: 'Sub 2', description: 'Description 2' },
-    ]);
+    const combinedState = useSelector(state => state);
+    const dispatch = useDispatch();
 
-    const handleAddInstruction = (data) => {
-        setInstructions([...instructions, data ]);
-    };
-
-    const handleAddTag = (data) => {
-        setTags([...tags, data]);
+    const handleSetSelectedDataArea = (dataArea) => {
+        dispatch(setSelectedDataArea(dataArea));
     };
 
     const handleAddData = (data) => {
-        setDataArea([...dataArea, data ]);
+        dispatch(setCombinedState({
+            dataAreas: [...combinedState.dataAreas, { ...data, id: combinedState.dataAreas.length + 1, instructions: [], tags: [], file: null, text: '' }],
+        }));
     };
-    
+
+    const handleAddTag = (id, newTag) => {
+        dispatch(addTag(id, newTag));
+    };
+
+    const handleDeleteTag = (id, index) => {
+        dispatch(deleteTag(id, index));
+    };
+
+    const handleAddInstruction = (id, newInstruction) => {
+        dispatch(addInstruction(id, newInstruction));
+    };
+
+    const handleDeleteInstruction = (id, index) => {
+        dispatch(deleteInstruction(id, index));
+    };
+
+    const handleSetDataAreas = (dataAreas) => {
+        dispatch(setCombinedState({ dataAreas }));
+    };
 
     return (
         <div className="gap-3 flex flex-row p-4 w-screen h-screen text-gray-700">
@@ -35,19 +54,65 @@ const Homepage = () => {
                     <button className="bg-[#70AD47] text-white px-3 py-2 rounded-lg">Refresh the Bot</button>
                 </div>
                 <div className="flex md:flex-1 flex-col md:flex-row space-x-4">
+                    {/* File/Text Input */}
                     <FileUpload
-                        file={file}
-                        setFile={setFile}
-                        setViewTextInput={setViewTextInput}
-                        text={text}
-                        setText={setText}
-                        viewTextInput={viewTextInput}
+                        dataArea={combinedState.dataAreas}
+                        setDataAreas={handleSetDataAreas}
+                        selectedDataArea={combinedState.selectedDataArea}
                     />
-                    <Instructions setInstructions={setInstructions} setTags={setTags} instructions={instructions} handleAddInstruction={handleAddInstruction} tags={tags} handleAddTag={handleAddTag} />
-                    <DataAreaList dataArea={dataArea} handleAddData={handleAddData} setDataArea={setDataArea} />
+
+                    {/* Instruction/Tags Column */}
+                    <Instructions
+                        setInstructions={(instructions) => dispatch(setCombinedState({
+                            selectedDataArea: {
+                                ...combinedState.selectedDataArea,
+                                instructions,
+                            },
+                        }))}
+                        setTags={(tags) => dispatch(setCombinedState({
+                            selectedDataArea: {
+                                ...combinedState.selectedDataArea,
+                                tags,
+                            },
+                        }))}
+                        instructions={combinedState.selectedDataArea ? combinedState.selectedDataArea.instructions : []}
+                        tags={combinedState.selectedDataArea ? combinedState.selectedDataArea.tags : []}
+                        handleAddInstruction={(instruction) => {
+                            dispatch(setCombinedState({
+                                selectedDataArea: {
+                                    ...combinedState.selectedDataArea,
+                                    instructions: [...combinedState.selectedDataArea.instructions, instruction],
+                                },
+                            }));
+                            handleAddInstruction(combinedState.selectedDataArea.id, instruction);
+                        }}
+                        handleDeleteInstruction={(index) => {
+                            const newInstructions = combinedState.selectedDataArea.instructions.filter((_, i) => i !== index);
+                            dispatch(setCombinedState({
+                                selectedDataArea: {
+                                    ...combinedState.selectedDataArea,
+                                    instructions: newInstructions,
+                                },
+                            }));
+                            handleDeleteInstruction(combinedState.selectedDataArea.id, index);
+                        }}
+                        handleAddTag={handleAddTag}
+                        handleDeleteTag={handleDeleteTag}
+                        selectedDataArea={combinedState?.selectedDataArea}
+                    />
+
+                    {/* Data Area */}
+                    <DataAreaList
+                        dataArea={combinedState.dataAreas}
+                        fullData={combinedState}
+                        handleAddData={handleAddData}
+                        setDataArea={handleSetDataAreas}
+                        setSelectedDataArea={handleSetSelectedDataArea}
+                    />
                 </div>
             </div>
-            <div className='md:flex-0 md:w-3/12'>
+            <div className='flex md:w-3/12 gap-3'>
+                {/* Chat View */}
                 <ChatFrame />
             </div>
         </div>

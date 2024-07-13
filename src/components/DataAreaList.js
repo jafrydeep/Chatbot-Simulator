@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 
 const DataAreaList = ({ dataArea, handleAddData, setDataArea, setSelectedDataArea, fullData }) => {
-    console.log(fullData?.selectedDataArea, dataArea)
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [formData, setFormData] = useState({
         subject: '',

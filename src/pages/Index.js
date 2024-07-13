@@ -1,77 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    setCombinedState,
+    setSelectedDataArea,
+    addTag,
+    deleteTag,
+    addInstruction,
+    deleteInstruction,
+} from '../store/actions';
 import FileUpload from '../components/FileUpload';
 import Instructions from '../components/Instructions';
 import DataAreaList from '../components/DataAreaList';
 import ChatFrame from '../components/ChatFrame';
 
 const Homepage = () => {
-    const [combinedState, setCombinedState] = useState({
-        dataAreas: [
-            {
-                id: 1,
-                subject: 'Subject 1',
-                sub: 'Sub 1',
-                description: 'Description 1',
-                instructions: [{ type: 'test', value: 'test sample data' }],
-                tags: ['Tag1', 'Tag2'],
-                file: null,
-                text: '',
-            },
-            {
-                id: 2,
-                subject: 'Subject 2',
-                sub: 'Sub 2',
-                description: 'Description 2',
-                instructions: [],
-                tags: [],
-                file: null,
-                text: '',
-            },
-        ],
-        selectedDataArea: null,
-    });
-    
-    const setSelectedDataArea = (dataArea) => {
-        setCombinedState((prevState) => ({
-            ...prevState,
-            selectedDataArea: dataArea,
-        }));
+    const combinedState = useSelector(state => state);
+    const dispatch = useDispatch();
+
+    const handleSetSelectedDataArea = (dataArea) => {
+        dispatch(setSelectedDataArea(dataArea));
     };
 
     const handleAddData = (data) => {
-        setCombinedState((prevState) => ({
-            ...prevState,
-            dataAreas: [...prevState.dataAreas, { ...data, id: prevState.dataAreas.length + 1, instructions: [], tags: [], file: null, text: '' }],
-        }));
-    };
-
-    const setDataAreas = (dataAreas) => {
-        setCombinedState((prevState) => ({
-            ...prevState,
-            dataAreas,
+        dispatch(setCombinedState({
+            dataAreas: [...combinedState.dataAreas, { ...data, id: combinedState.dataAreas.length + 1, instructions: [], tags: [], file: null, text: '' }],
         }));
     };
 
     const handleAddTag = (id, newTag) => {
-        const newDataAreas = combinedState.dataAreas.map(area =>
-            area.id === id ? { ...area, tags: [...area.tags, newTag] } : area
-        );
-        setCombinedState({ ...combinedState, dataAreas: newDataAreas });
+        dispatch(addTag(id, newTag));
     };
 
     const handleDeleteTag = (id, index) => {
-        const newDataAreas = combinedState.dataAreas.map(area => {
-            if (area.id === id) {
-                const updatedTags = [...area.tags];
-                updatedTags.splice(index, 1);
-                return { ...area, tags: updatedTags };
-            }
-            return area;
-        });
-        setCombinedState({ ...combinedState, dataAreas: newDataAreas });
+        dispatch(deleteTag(id, index));
     };
 
+    const handleAddInstruction = (id, newInstruction) => {
+        dispatch(addInstruction(id, newInstruction));
+    };
 
+    const handleDeleteInstruction = (id, index) => {
+        dispatch(deleteInstruction(id, index));
+    };
+
+    const handleSetDataAreas = (dataAreas) => {
+        dispatch(setCombinedState({ dataAreas }));
+    };
 
     return (
         <div className="gap-3 flex flex-row p-4 w-screen h-screen text-gray-700">
@@ -80,61 +54,66 @@ const Homepage = () => {
                     <button className="bg-[#70AD47] text-white px-3 py-2 rounded-lg">Refresh the Bot</button>
                 </div>
                 <div className="flex md:flex-1 flex-col md:flex-row space-x-4">
+                    {/* File/Text Input */}
                     <FileUpload
                         dataArea={combinedState.dataAreas}
-                        setDataAreas={setDataAreas}
+                        setDataAreas={handleSetDataAreas}
                         selectedDataArea={combinedState.selectedDataArea}
                     />
+
+                    {/* Instruction/Tags Column */}
                     <Instructions
-                        setInstructions={(instructions) => setCombinedState((prevState) => ({
-                            ...prevState,
+                        setInstructions={(instructions) => dispatch(setCombinedState({
                             selectedDataArea: {
-                                ...prevState.selectedDataArea,
+                                ...combinedState.selectedDataArea,
                                 instructions,
                             },
                         }))}
-                        setTags={(tags) => setCombinedState((prevState) => ({
-                            ...prevState,
+                        setTags={(tags) => dispatch(setCombinedState({
                             selectedDataArea: {
-                                ...prevState.selectedDataArea,
+                                ...combinedState.selectedDataArea,
                                 tags,
                             },
                         }))}
                         instructions={combinedState.selectedDataArea ? combinedState.selectedDataArea.instructions : []}
                         tags={combinedState.selectedDataArea ? combinedState.selectedDataArea.tags : []}
-                        handleAddInstruction={(instruction) => setCombinedState((prevState) => ({
-                            ...prevState,
-                            selectedDataArea: {
-                                ...prevState.selectedDataArea,
-                                instructions: [...prevState.selectedDataArea.instructions, instruction],
-                            },
-                        }))}
+                        handleAddInstruction={(instruction) => {
+                            dispatch(setCombinedState({
+                                selectedDataArea: {
+                                    ...combinedState.selectedDataArea,
+                                    instructions: [...combinedState.selectedDataArea.instructions, instruction],
+                                },
+                            }));
+                            handleAddInstruction(combinedState.selectedDataArea.id, instruction);
+                        }}
                         handleDeleteInstruction={(index) => {
                             const newInstructions = combinedState.selectedDataArea.instructions.filter((_, i) => i !== index);
-                            setCombinedState((prevState) => ({
-                                ...prevState,
+                            dispatch(setCombinedState({
                                 selectedDataArea: {
-                                    ...prevState.selectedDataArea,
+                                    ...combinedState.selectedDataArea,
                                     instructions: newInstructions,
                                 },
                             }));
+                            handleDeleteInstruction(combinedState.selectedDataArea.id, index);
                         }}
                         handleAddTag={handleAddTag}
                         handleDeleteTag={handleDeleteTag}
                         selectedDataArea={combinedState?.selectedDataArea}
                     />
+
+                    {/* Data Area */}
                     <DataAreaList
                         dataArea={combinedState.dataAreas}
                         fullData={combinedState}
                         handleAddData={handleAddData}
-                        setDataArea={setDataAreas}
-                        setSelectedDataArea={setSelectedDataArea}
+                        setDataArea={handleSetDataAreas}
+                        setSelectedDataArea={handleSetSelectedDataArea}
                     />
                 </div>
             </div>
             <div className='flex md:w-3/12 gap-3'>
+                {/* Chat View */}
                 <ChatFrame />
-
             </div>
         </div>
     );

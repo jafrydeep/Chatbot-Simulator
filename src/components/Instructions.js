@@ -3,8 +3,17 @@ import Modal from 'react-modal';
 import Tags from './Tags';
 import DataAreaNotSelect from './DataAreaNotSelect';
 
-const Instructions = ({ instructions, handleAddInstruction, tags, handleAddTag,
-    setInstructions, handleDeleteTag, setTags, selectedDataArea }) => {
+const Instructions = ({
+    instructions,
+    handleAddInstruction,
+    handleDeleteInstruction,
+    tags,
+    handleAddTag,
+    handleDeleteTag,
+    setInstructions,
+    setTags,
+    selectedDataArea
+}) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [instructionType, setInstructionType] = useState('');
     const [instructionValue, setInstructionValue] = useState('');
@@ -33,26 +42,29 @@ const Instructions = ({ instructions, handleAddInstruction, tags, handleAddTag,
         closeModal();
     };
 
-    const handleDeleteInstruction = (index) => {
-        const updatedInstructions = [...instructions];
-        updatedInstructions.splice(index, 1);
-        setInstructions(updatedInstructions)
-    };
-
     useEffect(() => {
+        if (selectedDataArea?.instruction?.length > 0) {
+            setInstructions(selectedDataArea ? selectedDataArea.instructions : []);
+        }
+        if (selectedDataArea?.tags?.length > 0) {
+            setTags(selectedDataArea ? selectedDataArea.tags : []);
+        }
+        // console.log(selectedDataArea? selectedDataArea.instruction : [])
+    }, [selectedDataArea?.instruction, selectedDataArea?.tags]);
 
-    },[selectedDataArea,])
     return (
         <div className="md:w-1/5 bg-white-100 border-slate-500 border-2 p-4 rounded-lg gap-3 flex flex-col">
             {!selectedDataArea ? <DataAreaNotSelect /> :
-                <><div className='text-end'>
-                    <button
-                        className="bg-orange-500 text-white mb-2 px-2 py-1 rounded"
-                        onClick={openModal}
-                    >
-                        Add New Instruction
-                    </button>
-                </div><div className="rounded-lg h-[48%] overflow-y-auto">
+                <>
+                    <div className='text-end'>
+                        <button
+                            className="bg-orange-500 text-white mb-2 px-2 py-1 rounded"
+                            onClick={openModal}
+                        >
+                            Add New Instruction
+                        </button>
+                    </div>
+                    <div className="rounded-lg h-[48%] overflow-y-auto">
                         <p className="font-semibold mb-2">Instructions Area</p>
                         {instructions?.map((instruction, index) => (
                             <div key={index} className="mb-1 text-gray-700 bg-blue-200 p-2 rounded-lg relative">
@@ -79,7 +91,13 @@ const Instructions = ({ instructions, handleAddInstruction, tags, handleAddTag,
                             </div>
                         ))}
                     </div>
-                    <Tags tags={tags} handleAddTag={handleAddTag} setTags={setTags} selectedDataArea={selectedDataArea} handleDeleteTag={handleDeleteTag} />
+                    <Tags
+                        tags={tags}
+                        handleAddTag={handleAddTag}
+                        setTags={setTags}
+                        selectedDataArea={selectedDataArea}
+                        handleDeleteTag={handleDeleteTag}
+                    />
                 </>
             }
             <Modal
