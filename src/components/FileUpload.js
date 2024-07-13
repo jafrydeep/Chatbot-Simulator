@@ -44,6 +44,11 @@ const FileUpload = () => {
         }
     }, [selectedDataArea?.file, selectedDataArea?.text]);
 
+    const handleTextButtonClick = () => {
+        dispatch(updateText(selectedDataArea.id, 'Enter Text'));
+        setViewTextInput(true);
+    };
+    
     return (
         !selectedDataArea ?
             <div className="md:w-3/5 bg-white-100 p-4 rounded-lg">
@@ -53,7 +58,7 @@ const FileUpload = () => {
                 <div className="flex justify-end gap-3 mb-4">
                     <input type="file" accept=".pdf,.docx" className="hidden" id="fileInput" onChange={handleFileChange} />
                     <label htmlFor="fileInput" className="bg-green-500 text-white px-2 py-1 rounded cursor-pointer">Load File</label>
-                    <button className="bg-[#ED7D31] text-white px-2 py-1 rounded" onClick={() => setViewTextInput(true)}>Text</button>
+                    <button className="bg-[#ED7D31] text-white px-2 py-1 rounded" onClick={handleTextButtonClick}>Text</button>
                 </div>
                 <div className="bg-white-100 border-slate-500 border-2 bg-opacity-90 group hover:bg-opacity-100 p-2 rounded-lg flex justify-center h-[85%] items-center ">
                     {(selectedDataArea?.file) ? (

@@ -89,10 +89,10 @@ const rootReducer = (state = initialState, action) => {
                     return area;
                 }),
             };
-        case 'UPDATE_FILE': {
+        case UPDATE_FILE: {
             const { id, file } = action.payload;
             const newDataAreas = state.dataAreas.map(area =>
-                area.id === id ? { ...area, file } : area
+                area.id === id ? { ...area, file, text: '' } : area
             );
             const selectedDataArea = newDataAreas.find(area => area.id === id);
             return {
@@ -101,7 +101,8 @@ const rootReducer = (state = initialState, action) => {
                 selectedDataArea,
             };
         }
-        case 'UPDATE_TEXT': {
+
+        case UPDATE_TEXT: {
             const { id, text } = action.payload;
             const newDataAreas = state.dataAreas.map(area =>
                 area.id === id ? { ...area, text, file: null } : area

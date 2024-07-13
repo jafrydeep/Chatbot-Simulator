@@ -37,12 +37,19 @@ export const deleteInstruction = (id, index) => ({
     payload: { id, index },
 });
 
-export const updateFile = (id, file) => ({
-    type: UPDATE_FILE,
-    payload: { id, file },
-});
+export const updateFile = (id, file) => {
+    console.log(file)
+    return ({
+        type: UPDATE_FILE,
+        payload: { id, file },
+    });
+}
 
 export const updateText = (id, text) => ({
     type: UPDATE_TEXT,
     payload: { id, text },
+});
+export const toggleViewTextInput = (id, viewTextInput) => ({
+    type: 'TOGGLE_VIEW_TEXT_INPUT',
+    payload: { id, viewTextInput }
 });
