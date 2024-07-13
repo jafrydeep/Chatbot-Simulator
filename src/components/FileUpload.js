@@ -11,6 +11,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     import.meta.url,
 ).toString();
 
+
+// (async () => {
+//     const pdfjs = await import('pdfjs-dist')
+//     console.log(typeof pdfjs.getDocument)
+//   })()
 const FileUpload = () => {
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
@@ -62,6 +67,7 @@ const FileUpload = () => {
                 </div>
                 <div className="bg-white-100 border-slate-500 border-2 bg-opacity-90 group hover:bg-opacity-100 p-2 rounded-lg flex justify-center h-[85%] items-center ">
                     {(selectedDataArea?.file) ? (
+                        // <iframe src={selectedDataArea.file} width="100%" height="500px" />
                         <div className='relative shadow-xl'>
                             <Document file={selectedDataArea.file} onLoadSuccess={onDocumentLoadSuccess}>
                                 <Page pageNumber={pageNumber} width={280} />
