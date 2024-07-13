@@ -16,6 +16,7 @@ const Instructions = ({
 }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [instructionType, setInstructionType] = useState('');
+    const [instructionName, setInstructionName] = useState('');
     const [instructionValue, setInstructionValue] = useState('');
 
     const openModal = () => setModalIsOpen(true);
@@ -25,6 +26,8 @@ const Instructions = ({
         const { name, value } = e.target;
         if (name === 'type') {
             setInstructionType(value);
+        } else if (name === 'name') {
+            setInstructionName(value);
         } else if (name === 'value') {
             setInstructionValue(value);
         }
@@ -34,23 +37,24 @@ const Instructions = ({
         e.preventDefault();
         const newInstructionObject = {
             type: instructionType,
+            name: instructionName,
             value: instructionValue
         };
         handleAddInstruction(newInstructionObject);
         setInstructionType('');
+        setInstructionName('');
         setInstructionValue('');
         closeModal();
     };
 
     useEffect(() => {
-        if (selectedDataArea?.instruction?.length > 0) {
+        if (selectedDataArea?.instructions?.length > 0) {
             setInstructions(selectedDataArea ? selectedDataArea.instructions : []);
         }
         if (selectedDataArea?.tags?.length > 0) {
             setTags(selectedDataArea ? selectedDataArea.tags : []);
         }
-        // console.log(selectedDataArea? selectedDataArea.instruction : [])
-    }, [selectedDataArea?.instruction, selectedDataArea?.tags]);
+    }, [selectedDataArea?.instructions, selectedDataArea?.tags]);
 
     return (
         <div className="md:w-1/5 bg-white-100 border-slate-500 border-2 p-4 rounded-lg gap-3 flex flex-col">
@@ -69,6 +73,7 @@ const Instructions = ({
                         {instructions?.map((instruction, index) => (
                             <div key={index} className="mb-1 text-gray-700 bg-blue-200 p-2 rounded-lg relative">
                                 <p><span className="font-semibold">Type:</span> {instruction.type}</p>
+                                <p><span className="font-semibold">Name:</span> {instruction.name}</p>
                                 <p><span className="font-semibold">Value:</span> {instruction.value}</p>
                                 <button
                                     onClick={() => handleDeleteInstruction(index)}
@@ -118,6 +123,19 @@ const Instructions = ({
                             id="type"
                             name="type"
                             value={instructionType}
+                            onChange={handleChange}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                            Instruction Name
+                        </label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value={instructionName}
                             onChange={handleChange}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />

@@ -16,7 +16,7 @@ const initialState = {
             subject: 'Subject 1',
             sub: 'Sub 1',
             description: 'Description 1',
-            instructions: [{ type: 'test', value: 'test sample data' }],
+            instructions: [{ type: 'test', name: 'test name', value: 'test sample data' }],
             tags: ['Tag1', 'Tag2'],
             file: null,
             text: '',
